@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE_URL } from '../../site';
+
+const guides = [
+  {
+    href: '/guides/tip-screen-prank/',
+    title: 'How to pull the tip screen prank (without being a jerk)',
+    body: 'When to hand your phone to the waiter, what to say, and how to make sure everyone laughs.',
+  },
+  {
+    href: '/guides/why-every-screen-asks-for-a-tip/',
+    title: 'Why every screen asks for a tip now',
+    body: 'Where tip screens came from, why they feel awkward, and a funny way to push back.',
+  },
+];
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    url: `${SITE_URL}/guides/`,
+    name: 'TipFlip guides',
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    hasPart: guides.map((g) => ({ '@type': 'Article', headline: g.title, url: `${SITE_URL}${g.href}` })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/guides/` },
+    ],
+  },
+];
+---
+<Base
+  title="Tip Screen Prank Guides and Tipping Humor | TipFlip"
+  description="Guides from TipFlip: how to pull the tip screen prank on your waiter, and why every screen asks for a tip now."
+  schema={schema}
+>
+  <div class="wrap narrow">
+    <header class="page-head">
+      <h1>Guides</h1>
+      <p class="lede">Tip screen pranks, tipping etiquette and why every card reader wants 25%.</p>
+    </header>
+    <ul class="guide-list">
+      {guides.map((g) => (
+        <li>
+          <h2><a href={g.href}>{g.title}</a></h2>
+          <p class="muted">{g.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .guide-list { list-style: none; padding: 0; margin: 24px 0 80px; display: grid; gap: 16px; }
+  .guide-list li { border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); padding: 24px; }
+  .guide-list h2 { font-size: 1.3rem; }
+  .guide-list a { text-decoration: none; }
+  .guide-list p { margin: 0; }
+</style>

@@ -1,0 +1,278 @@
+---
+import Base from '../layouts/Base.astro';
+import Phone from '../components/Phone.astro';
+import StoreButtons from '../components/StoreButtons.astro';
+import { LINKS, SITE_URL } from '../site';
+
+import welcome from '../assets/screens/welcome.png';
+import signature from '../assets/screens/signature-signed.png';
+import areYouSure from '../assets/screens/are-you-sure.png';
+import human from '../assets/screens/human.png';
+import thankYou from '../assets/screens/thank-you.png';
+
+const title = 'TipFlip: The Tip Screen Prank App for Restaurants';
+const description =
+  'Flip the tip screen on your waiter. TipFlip is a prank app that asks your server to pick a customer discount: 20%, 30%, 40% or custom. For iPhone and Android.';
+
+const steps = [
+  {
+    img: welcome,
+    alt: 'TipFlip welcome screen: "Please select a customer discount" with 20%, 30%, 40% and Custom buttons, plus a No discount button',
+    title: 'Hand over your phone',
+    body: 'When the bill comes, open TipFlip and hand your phone to the waiter. It looks just like the tip screens they hand you, except this one asks them to choose your discount.',
+  },
+  {
+    img: signature,
+    alt: 'TipFlip signature screen with a signature drawn in the box and a Done signing button',
+    title: 'They pick a discount and sign',
+    body: 'Your server taps 20%, 30%, 40% or types a custom amount, then signs with a finger to "agree" to it. You decide whether a signature is required.',
+  },
+  {
+    img: areYouSure,
+    alt: 'TipFlip "Are you sure?" screen telling the waiter customers are 99% more likely to tip after a discount',
+    title: 'Saying no takes some work',
+    body: 'Tapping "No discount" opens an "Are you sure?" guilt trip. Push past that and they still have to prove they are human by solving a calculus problem.',
+  },
+  {
+    img: thankYou,
+    alt: 'TipFlip Thank you screen with a big green check mark',
+    title: 'Thank you!',
+    body: 'A big green check mark and a ding finish the joke. The discount, the time and the signature are saved in History on your phone, ready to show the manager.',
+  },
+];
+
+const features = [
+  { title: 'Your own discount amounts', body: 'Set the three preset buttons to whatever you like, and allow a custom amount from 10% to 99%.' },
+  { title: 'Finger signature', body: 'Make the waiter sign to confirm the discount, or turn signing off for a faster gag.' },
+  { title: 'Guilt trip built in', body: 'An "Are you sure?" screen and a "prove you\'re not a robot" math check stand between your server and "No discount".' },
+  { title: 'Discount history', body: 'Every discount is saved with the date, time and signature, so you can scroll back through your wins.' },
+  { title: 'Write your own messages', body: 'Edit the welcome line, the guilt trip, the signature agreement and even the waiter\'s Terms.' },
+  { title: 'Private and offline', body: 'No account, no internet connection, no tracking. Everything stays on your phone.' },
+];
+
+const faq = [
+  {
+    q: 'What is TipFlip?',
+    a: 'TipFlip is a prank app that parodies the tip screens restaurants and cafes hand to customers. Instead of asking you for a tip, it asks your waiter to select a customer discount, like 20%, 30% or 40%.',
+  },
+  {
+    q: 'Does TipFlip actually get me a discount?',
+    a: 'No. TipFlip is a joke. A TipFlip record is not a coupon or a contract, and whether you get a discount is entirely up to the restaurant. It is meant to get a laugh, not a lower bill.',
+  },
+  {
+    q: 'Will my waiter be annoyed?',
+    a: 'Most people in hospitality have seen plenty of tip screens, so the role reversal usually lands as a joke. Read the room, pick a relaxed moment, and always tip fairly afterward. Our guide on how to pull the tip screen prank has more tips.',
+  },
+  {
+    q: 'Which phones does TipFlip work on?',
+    a: 'TipFlip is made for iPhone and Android phones. It is coming soon to the App Store and Google Play.',
+  },
+  {
+    q: 'Does TipFlip need internet or an account?',
+    a: 'No. TipFlip works completely offline and has no sign-up. Your settings, history and signatures are stored only on your phone.',
+  },
+  {
+    q: 'Does TipFlip collect my data?',
+    a: 'No. TipFlip has no servers and no analytics, and it does not collect personal data or location. You can delete any record, or all of them, at any time.',
+  },
+  {
+    q: 'Can I change what the screens say?',
+    a: 'Yes. In Settings you can change the discount amounts, the welcome message, the "Are you sure?" message, the signature text and the waiter\'s Terms, and turn signing, the "No discount" button and the human check on or off.',
+  },
+  {
+    q: 'Does TipFlip have dark mode?',
+    a: 'Yes. Dark mode can be switched on in Settings.',
+  },
+];
+
+const schema = [
+  {
+    '@type': 'MobileApplication',
+    '@id': `${SITE_URL}/#app`,
+    name: 'TipFlip',
+    alternateName: 'TipFlip Discount App',
+    description:
+      'A prank app that parodies restaurant tip screens. The diner hands their phone to the waiter, who is asked to select a customer discount and sign for it.',
+    url: `${SITE_URL}/`,
+    image: `${SITE_URL}/og-image.png`,
+    screenshot: `${SITE_URL}/og-image.png`,
+    operatingSystem: 'iOS, Android',
+    applicationCategory: 'EntertainmentApplication',
+    inLanguage: 'en',
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    ...(LINKS.appStore || LINKS.googlePlay
+      ? { downloadUrl: [LINKS.appStore, LINKS.googlePlay].filter(Boolean) }
+      : {}),
+  },
+  {
+    '@type': 'WebPage',
+    '@id': `${SITE_URL}/#webpage`,
+    url: `${SITE_URL}/`,
+    name: title,
+    description,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    about: { '@id': `${SITE_URL}/#app` },
+    primaryImageOfPage: `${SITE_URL}/og-image.png`,
+  },
+  {
+    '@type': 'FAQPage',
+    '@id': `${SITE_URL}/#faq`,
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">The tip screen, flipped</p>
+        <h1>The tip screen prank app that asks your waiter for a discount</h1>
+        <p class="lede">
+          Tired of being asked for 20%, 25% or 30% every time you buy a coffee? TipFlip turns the tables.
+          Hand your phone to your server and let them pick <em>your</em> discount.
+        </p>
+        <StoreButtons />
+        <p class="hero-note muted">For iPhone and Android. Works offline, no account needed.</p>
+      </div>
+      <div class="hero-phone">
+        <Phone src={welcome} alt="TipFlip on a phone: Please select a customer discount, with 20%, 30%, 40% and Custom buttons" eager sizes="(max-width: 860px) 70vw, 320px" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="how-it-works" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-title">How the TipFlip prank works</h2>
+        <p class="muted">Four screens, one very confused waiter. Here is what your server sees when you hand them your phone.</p>
+      </div>
+      <ol class="steps">
+        {steps.map((step, i) => (
+          <li class="step">
+            <Phone src={step.img} alt={step.alt} sizes="(max-width: 640px) 70vw, 240px" />
+            <div>
+              <span class="step-num" aria-hidden="true">{i + 1}</span>
+              <h3>{step.title}</h3>
+              <p class="muted">{step.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="features-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Features</p>
+        <h2 id="features-title">Everything you need to flip the tip screen</h2>
+      </div>
+      <ul class="features">
+        {features.map((f) => (
+          <li>
+            <h3>{f.title}</h3>
+            <p class="muted">{f.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="why-title">
+    <div class="wrap why-grid">
+      <div>
+        <p class="eyebrow">Why TipFlip</p>
+        <h2 id="why-title">Tip screens are everywhere. Now you have one too.</h2>
+        <p>
+          Self-checkouts, coffee counters, food trucks and even vending kiosks now spin a screen around and ask for
+          18%, 20% or 25% before you have tasted anything. TipFlip is a lighthearted way to push back: the same
+          screen, the same big blue buttons, pointed the other way.
+        </p>
+        <p>
+          It is a joke, not a protest. The best TipFlip moments end with everyone laughing, and with a fair tip on the
+          table. Read <a href="/guides/why-every-screen-asks-for-a-tip/">why every screen asks for a tip now</a> or
+          learn <a href="/guides/tip-screen-prank/">how to pull the tip screen prank</a> without being a jerk.
+        </p>
+      </div>
+      <div class="hero-phone">
+        <Phone src={human} alt='TipFlip "Are you human?" screen asking the waiter to solve an integral before choosing No discount' sizes="(max-width: 860px) 70vw, 300px" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="faq-title">
+    <div class="wrap narrow">
+      <p class="eyebrow">FAQ</p>
+      <h2 id="faq-title">TipFlip questions, answered</h2>
+      <div class="faq">
+        {faq.map((item) => (
+          <details>
+            <summary><h3>{item.q}</h3></summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta">
+    <div class="wrap narrow center">
+      <h2>Ready to flip the tip screen?</h2>
+      <p class="lede">TipFlip is coming soon to iPhone and Android.</p>
+      <div class="center-row"><StoreButtons /></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: clamp(40px, 7vw, 88px) 0 clamp(56px, 8vw, 96px); overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+  .hero-copy .lede { margin-bottom: 28px; max-width: 34em; }
+  .hero-note { font-size: 0.95rem; margin-top: 14px; }
+  .hero-phone { display: flex; justify-content: center; }
+  .hero-phone :global(.phone) { max-width: 320px; transform: rotate(2deg); }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .step { display: flex; flex-direction: column; gap: 20px; }
+  .step :global(.phone) { max-width: 240px; border-radius: 32px; padding: 8px; }
+  .step :global(.phone img) { border-radius: 25px; }
+  .step-num {
+    display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--primary); color: var(--on-primary); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px;
+  }
+
+  .features { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .features li { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .features p { margin: 0; }
+
+  .why-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center; }
+
+  .faq details { border-bottom: 1px solid var(--border); }
+  .faq summary { cursor: pointer; list-style: none; padding: 18px 36px 18px 0; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: var(--primary); }
+  .faq details[open] summary::after { content: '–'; }
+  .faq summary h3 { margin: 0; font-size: 1.1rem; }
+  .faq details p { color: var(--muted); }
+
+  .center { text-align: center; }
+  .center-row { display: flex; justify-content: center; }
+
+  @media (max-width: 960px) {
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .features { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .hero-grid, .why-grid { grid-template-columns: 1fr; }
+    .hero-phone :global(.phone) { max-width: 280px; }
+  }
+  @media (max-width: 560px) {
+    .steps, .features { grid-template-columns: 1fr; }
+    .step { align-items: center; text-align: center; }
+  }
+</style>

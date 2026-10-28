@@ -1,0 +1,18 @@
+---
+import { Picture } from 'astro:assets';
+
+// A real app screenshot in a simple phone frame.
+const { src, alt, eager = false, sizes = '(max-width: 640px) 70vw, 300px' } = Astro.props;
+---
+<figure class="phone">
+  <Picture
+    src={src}
+    alt={alt}
+    widths={[260, 390, 600, 780]}
+    sizes={sizes}
+    formats={['avif', 'webp']}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    decoding={eager ? 'sync' : 'async'}
+  />
+</figure>

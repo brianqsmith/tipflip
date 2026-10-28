@@ -1,0 +1,10 @@
+---
+import Info from '../layouts/Info.astro';
+// The same text the app shows, so the two never drift apart.
+import { INFO_PAGES } from '../../../src/content/info';
+---
+<Info
+  page={INFO_PAGES.terms}
+  title="Terms of Use | TipFlip"
+  description="TipFlip is a parody app made for fun. Read the TipFlip Terms: what the app does, why it is not a real discount, and how records are kept."
+/>

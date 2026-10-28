@@ -1,0 +1,31 @@
+---
+import Base from './Base.astro';
+import type { InfoPage } from '../../../src/content/info';
+
+interface Props {
+  page: InfoPage;
+  title: string;
+  description: string;
+}
+
+const { page, title, description } = Astro.props;
+---
+<Base title={title} description={description}>
+  <article class="wrap narrow prose info">
+    <header class="page-head">
+      <h1>{page.title}</h1>
+      {page.intro && <p class="lede">{page.intro}</p>}
+    </header>
+    {page.sections.map((s) => (
+      <section>
+        {s.heading && <h2>{s.heading}</h2>}
+        <p>{s.body}</p>
+      </section>
+    ))}
+    <slot />
+  </article>
+</Base>
+
+<style>
+  .info { padding-bottom: 80px; }
+</style>
