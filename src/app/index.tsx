@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../components/Button';
 import { CustomDiscountSheet } from '../components/CustomDiscountSheet';
@@ -31,12 +31,19 @@ export default function WelcomeScreen() {
     <View style={styles.screen}>
       <WaiterScreen
         footer={
-          <Text style={[styles.footer, { color: colors.textMuted }]}>
-            *By selecting a discount you agree to the{' '}
-            <Text onPress={() => router.push('/terms')} accessibilityRole="link">
-              Terms
+          // The whole line opens the Terms, so the small link is easy to hit.
+          <Pressable
+            onPress={() => router.push('/terms')}
+            hitSlop={{ top: 12, bottom: 12, left: 8, right: 8 }}
+            accessibilityRole="link"
+            accessibilityLabel="Terms"
+            style={styles.footerPress}
+          >
+            <Text style={[styles.footer, { color: colors.textMuted }]}>
+              *By selecting a discount you agree to the{' '}
+              <Text style={{ color: colors.primary }}>Terms</Text>
             </Text>
-          </Text>
+          </Pressable>
         }
       >
         <View style={styles.body}>
@@ -100,5 +107,6 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row', gap: 14 },
   lock: { position: 'absolute', right: 16 },
+  footerPress: { paddingVertical: 8 },
   footer: { fontSize: 13, paddingHorizontal: 12, paddingBottom: 6 },
 });
