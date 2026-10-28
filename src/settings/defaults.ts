@@ -32,3 +32,16 @@ export const DEFAULT_SETTINGS: Settings = {
     "By selecting a discount, you agree to provide the selected discount to the customer. TipFlip records this request on the customer's device. The customer may show the record to a manager if needed.",
   darkMode: false,
 };
+
+// Character limits for the editable texts.
+export const LIMITS = {
+  welcomeMessage: 60,
+  signatureMessage: 200,
+  noDiscountMessage: 150,
+  humanCheckMessage: 120,
+  terms: 1000,
+};
+
+export const DISCOUNT_STEP = 5;
+export const DISCOUNT_MIN = 10;
+export const DISCOUNT_MAX = 100;

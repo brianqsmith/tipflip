@@ -26,6 +26,10 @@ export async function migrate(db: SQLiteDatabase) {
       created_at TEXT NOT NULL,
       signature TEXT
     );
+    CREATE TABLE IF NOT EXISTS settings (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      value TEXT NOT NULL
+    );
   `);
 }
 
@@ -55,4 +59,12 @@ export async function listDiscounts(db: SQLiteDatabase, limit?: number): Promise
     createdAt: row.created_at,
     signature: row.signature ? (JSON.parse(row.signature) as Signature) : null,
   }));
+}
+
+export async function deleteDiscount(db: SQLiteDatabase, id: number) {
+  await db.runAsync('DELETE FROM discounts WHERE id = ?', id);
+}
+
+export async function clearDiscounts(db: SQLiteDatabase) {
+  await db.runAsync('DELETE FROM discounts');
 }
