@@ -17,4 +17,7 @@ npm run typecheck
 - `src/app/` screens (each file is a route)
 - `src/components/` shared UI, including the tipflip `Logo`
 - `src/theme/` light and dark color palettes and the theme provider
+- `src/settings/` the settings and their defaults
+- `src/storage/` the on-device history database (SQLite)
+- `src/hooks/` shared screen behavior: blocking Android back, logo reset, saving a discount
 - `assets/` app icon, Android adaptive icon, splash, and the source `logo.svg`
