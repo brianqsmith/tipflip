@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
+import { useResetToWelcome } from '../../hooks/useResetToWelcome';
 import { useSettings } from '../../settings/SettingsProvider';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Button } from '../Button';
@@ -61,6 +62,7 @@ export function BackHeader({
   showIcon?: boolean;
 }) {
   const { colors } = useTheme();
+  const resetToWelcome = useResetToWelcome();
   return (
     <View style={[styles.header, { borderBottomColor: colors.border }]}>
       <Pressable
@@ -75,9 +77,15 @@ export function BackHeader({
       </Pressable>
       {title ? <Text style={[styles.headerTitle, { color: colors.text }]}>{title}</Text> : null}
       {showIcon ? (
-        <View style={styles.icon}>
+        <Pressable
+          onPress={resetToWelcome}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel="Go to welcome screen"
+          style={styles.icon}
+        >
           <LogoIcon height={28} />
-        </View>
+        </Pressable>
       ) : null}
     </View>
   );
