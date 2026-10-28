@@ -50,7 +50,10 @@ export function ToggleRow({
         <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
         {description ? <Text style={[styles.help, { color: colors.textMuted }]}>{description}</Text> : null}
       </View>
-      <Toggle value={value} onValueChange={onValueChange} disabled={disabled} label={label} />
+      {/* Sits beside the end of the description, not the title. */}
+      <View style={description ? styles.toggleBesideDescription : undefined}>
+        <Toggle value={value} onValueChange={onValueChange} disabled={disabled} label={label} />
+      </View>
     </View>
   );
 }
@@ -138,9 +141,12 @@ export function Divider() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   dimmed: { opacity: 0.45 },
-  toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 16, paddingVertical: 14 },
-  label: { fontSize: 17, fontWeight: '600' },
+  toggleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 16, paddingVertical: 14 },
+  label: { fontSize: 17, lineHeight: 22, fontWeight: '600' },
   help: { fontSize: 14, lineHeight: 19, marginTop: 3 },
+  // Bottom-aligned with the description, then nudged so the toggle is centered
+  // on its last line (19 high) rather than on its bottom edge (toggle is 31).
+  toggleBesideDescription: { alignSelf: 'flex-end', marginBottom: 19 / 2 - 31 / 2 },
   fieldLabel: { paddingTop: 14, paddingBottom: 10 },
   labelRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   textArea: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingTop: 10, paddingBottom: 8 },

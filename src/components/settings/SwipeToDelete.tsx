@@ -24,6 +24,8 @@ export function SwipeToDelete({ children, onDelete }: { children: ReactNode; onD
     () =>
       PanResponder.create({
         onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dx) > 8 && Math.abs(g.dx) > Math.abs(g.dy),
+        // Keep the swipe once it has started.
+        onPanResponderTerminationRequest: () => false,
         onPanResponderMove: (_, g) => {
           const start = open.current ? -ACTION_WIDTH : 0;
           translateX.setValue(Math.min(0, Math.max(-ACTION_WIDTH * 1.4, start + g.dx)));

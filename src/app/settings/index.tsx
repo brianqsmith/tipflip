@@ -1,10 +1,12 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, Text } from 'react-native';
+import { BackHandler, Platform, ScrollView, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Toggle } from '../../components/settings/controls';
+import { useResetToWelcome } from '../../hooks/useResetToWelcome';
+import { HistoryRow } from '../../components/settings/HistoryRow';
 import { ListRow, Section } from '../../components/settings/ListRow';
 import { BackHeader } from '../../components/settings/SettingsPage';
 import { LINKS } from '../../settings/links';
@@ -12,36 +14,45 @@ import { useSettings } from '../../settings/SettingsProvider';
 import { listDiscounts, type DiscountRecord } from '../../storage/history';
 import { useTheme } from '../../theme/ThemeProvider';
 import { openLink } from '../../utils/dialogs';
-import { formatWhen } from '../../utils/format';
 
 export default function SettingsHome() {
   const { colors } = useTheme();
   const { settings, updateSettings } = useSettings();
   const db = useSQLiteContext();
+  const resetToWelcome = useResetToWelcome();
   const [recent, setRecent] = useState<DiscountRecord[]>([]);
+  const [expanded, setExpanded] = useState<number | null>(null);
 
   useFocusEffect(
     useCallback(() => {
       listDiscounts(db, 2).then(setRecent);
-    }, [db]),
+      // Android's back button also starts over on the welcome screen.
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        resetToWelcome();
+        return true;
+      });
+      return () => subscription.remove();
+    }, [db, resetToWelcome]),
   );
 
   const storeLink = Platform.OS === 'android' ? LINKS.playStore : LINKS.appStore;
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: colors.surface }]}>
-      <BackHeader title="Settings & History" />
+      {/* Settings is opened from the waiter screens, so leaving it always
+          starts over on the welcome screen. */}
+      <BackHeader title="Settings & History" onBack={resetToWelcome} />
       <ScrollView contentContainerStyle={styles.body}>
         <Section title="HISTORY">
           {recent.length === 0 ? (
             <ListRow label="No discounts yet" right={null} />
           ) : (
             recent.map((record) => (
-              <ListRow
+              <HistoryRow
                 key={record.id}
-                label={`${record.percent}%`}
-                right={<Text style={[styles.when, { color: colors.textMuted }]}>{formatWhen(record.createdAt)}</Text>}
-                onPress={() => router.push('/settings/history')}
+                record={record}
+                expanded={expanded === record.id}
+                onToggle={() => setExpanded(expanded === record.id ? null : record.id)}
               />
             ))
           )}
@@ -89,6 +100,5 @@ export default function SettingsHome() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   body: { paddingHorizontal: 16, paddingBottom: 40 },
-  when: { fontSize: 15 },
   star: { color: '#F5B700', fontSize: 20 },
 });

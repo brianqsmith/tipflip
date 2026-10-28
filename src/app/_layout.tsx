@@ -30,11 +30,12 @@ function RootStack() {
           contentStyle: { backgroundColor: colors.background },
           // No swipe-back on waiter screens; Settings and Terms turn it back on.
           gestureEnabled: false,
-          animation: 'fade',
+          // Pages change instantly, with no transition.
+          animation: 'none',
         }}
       >
-        <Stack.Screen name="terms" options={{ gestureEnabled: true, animation: 'default' }} />
-        <Stack.Screen name="settings" options={{ gestureEnabled: true, animation: 'default' }} />
+        <Stack.Screen name="terms" options={{ gestureEnabled: true }} />
+        <Stack.Screen name="settings" options={{ gestureEnabled: true }} />
       </Stack>
     </>
   );
