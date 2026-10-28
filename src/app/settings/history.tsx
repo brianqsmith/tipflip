@@ -3,14 +3,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { SignatureView } from '../../components/SignaturePad';
-import { Chevron } from '../../components/settings/ListRow';
+import { HistoryColumnTitles, HistoryRow } from '../../components/settings/HistoryRow';
 import { BackHeader } from '../../components/settings/SettingsPage';
 import { SwipeToDelete } from '../../components/settings/SwipeToDelete';
 import { clearDiscounts, deleteDiscount, listDiscounts, type DiscountRecord } from '../../storage/history';
 import { useTheme } from '../../theme/ThemeProvider';
 import { confirm } from '../../utils/dialogs';
-import { formatDate, formatTime } from '../../utils/format';
 
 export default function HistoryScreen() {
   const { colors } = useTheme();
@@ -39,24 +37,13 @@ export default function HistoryScreen() {
     reload();
   };
 
-  const header = (
-    <View style={[styles.columns, { backgroundColor: colors.surface }]}>
-      {['DISCOUNT', 'DATE', 'TIME'].map((title) => (
-        <Text key={title} style={[styles.columnTitle, styles[title as 'DISCOUNT'], { color: colors.textMuted }]}>
-          {title}
-        </Text>
-      ))}
-      <View style={styles.chevron} />
-    </View>
-  );
-
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: colors.background }]}>
       <BackHeader title="History" />
       <FlatList
         data={records ?? []}
         keyExtractor={(record) => String(record.id)}
-        ListHeaderComponent={header}
+        ListHeaderComponent={<HistoryColumnTitles />}
         ListEmptyComponent={
           records ? (
             <Text style={[styles.empty, { color: colors.textMuted }]}>
@@ -64,33 +51,15 @@ export default function HistoryScreen() {
             </Text>
           ) : undefined
         }
-        renderItem={({ item }) => {
-          const isOpen = expanded === item.id;
-          return (
-            <SwipeToDelete onDelete={() => remove(item.id)}>
-              <Pressable
-                onPress={item.signature ? () => setExpanded(isOpen ? null : item.id) : undefined}
-                disabled={!item.signature}
-                accessibilityRole={item.signature ? 'button' : undefined}
-                accessibilityHint={item.signature ? 'Shows the signature' : undefined}
-                accessibilityState={item.signature ? { expanded: isOpen } : undefined}
-                style={[styles.record, { borderBottomColor: colors.border }]}
-              >
-                <View style={styles.cells}>
-                  <Text style={[styles.percent, styles.DISCOUNT, { color: colors.logoTip }]}>{item.percent}%</Text>
-                  <Text style={[styles.cell, styles.DATE, { color: colors.textMuted }]}>{formatDate(item.createdAt)}</Text>
-                  <Text style={[styles.cell, styles.TIME, { color: colors.textMuted }]}>{formatTime(item.createdAt)}</Text>
-                  <View style={styles.chevron}>{item.signature ? <Chevron direction={isOpen ? 'down' : 'right'} /> : null}</View>
-                </View>
-                {isOpen && item.signature ? (
-                  <View style={styles.signature}>
-                    <SignatureView signature={item.signature} />
-                  </View>
-                ) : null}
-              </Pressable>
-            </SwipeToDelete>
-          );
-        }}
+        renderItem={({ item }) => (
+          <SwipeToDelete onDelete={() => remove(item.id)}>
+            <HistoryRow
+              record={item}
+              expanded={expanded === item.id}
+              onToggle={() => setExpanded(expanded === item.id ? null : item.id)}
+            />
+          </SwipeToDelete>
+        )}
         ListFooterComponent={
           records && records.length > 0 ? (
             <View style={[styles.footer, { backgroundColor: colors.surface }]}>
@@ -107,17 +76,6 @@ export default function HistoryScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
-  columns: { flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10 },
-  columnTitle: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5 },
-  DISCOUNT: { width: 90 },
-  DATE: { flex: 1 },
-  TIME: { width: 84 },
-  record: { paddingHorizontal: 16, paddingVertical: 16, borderBottomWidth: StyleSheet.hairlineWidth },
-  cells: { flexDirection: 'row', alignItems: 'center' },
-  percent: { fontSize: 18, fontWeight: '700' },
-  cell: { fontSize: 15 },
-  chevron: { width: 20, alignItems: 'flex-end' },
-  signature: { marginTop: 10 },
   empty: { textAlign: 'center', fontSize: 16, padding: 32 },
   footer: { alignItems: 'flex-end', paddingHorizontal: 16, paddingVertical: 14 },
   clearAll: { fontSize: 16, fontWeight: '600' },

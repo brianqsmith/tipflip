@@ -39,12 +39,19 @@ export function SettingsPage({
   );
 }
 
-export function BackHeader({ title }: { title?: string }) {
+export function BackHeader({ title, onBack }: { title?: string; onBack?: () => void }) {
   const { colors } = useTheme();
   return (
     <View style={[styles.header, { borderBottomColor: colors.border }]}>
-      <Pressable onPress={() => router.back()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Back">
-        <Text style={[styles.back, { color: colors.primary }]}>‹ Back</Text>
+      <Pressable
+        onPress={onBack ?? (() => router.back())}
+        hitSlop={12}
+        accessibilityRole="button"
+        accessibilityLabel="Back"
+        style={styles.backButton}
+      >
+        <Text style={[styles.arrow, { color: colors.primary }]}>‹</Text>
+        <Text style={[styles.back, { color: colors.primary }]}>Back</Text>
       </Pressable>
       {title ? <Text style={[styles.headerTitle, { color: colors.text }]}>{title}</Text> : null}
     </View>
@@ -80,9 +87,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingVertical: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  backButton: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  arrow: { fontSize: 38, lineHeight: 38, fontWeight: '400', marginTop: -4 },
   back: { fontSize: 18, fontWeight: '600' },
   headerTitle: { position: 'absolute', left: 0, right: 0, textAlign: 'center', fontSize: 18, fontWeight: '700', zIndex: -1 },
   body: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 32 },

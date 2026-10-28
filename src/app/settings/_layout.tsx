@@ -10,6 +10,7 @@ export default function SettingsLayout() {
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
+        animation: 'none',
         contentStyle: { backgroundColor: colors.background },
       }}
     />
