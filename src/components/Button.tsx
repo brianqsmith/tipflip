@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'rea
 
 import { useTheme } from '../theme/ThemeProvider';
 
-type Variant = 'primary' | 'secondary';
+type Variant = 'primary' | 'secondary' | 'accent';
 
 export function Button({
   label,
@@ -27,16 +27,21 @@ export function Button({
   const { colors } = useTheme();
   const isPrimary = variant === 'primary';
 
+  const isAccent = variant === 'accent';
   const background = looksDisabled
     ? colors.disabled
     : isPrimary
       ? colors.primary
-      : colors.secondary;
+      : isAccent
+        ? colors.accent
+        : colors.secondary;
   const foreground = looksDisabled
     ? colors.onDisabled
     : isPrimary
       ? colors.onPrimary
-      : colors.onSecondary;
+      : isAccent
+        ? colors.onAccent
+        : colors.onSecondary;
 
   return (
     <Pressable
@@ -47,7 +52,7 @@ export function Button({
       style={({ pressed }) => [
         styles.button,
         { backgroundColor: background },
-        !isPrimary && !looksDisabled && [styles.secondary, { borderColor: colors.border, shadowColor: colors.shadow }],
+        variant === 'secondary' && !looksDisabled && [styles.secondary, { borderColor: colors.border, shadowColor: colors.shadow }],
         looksDisabled && { borderColor: colors.border, borderWidth: StyleSheet.hairlineWidth },
         pressed && !looksDisabled && styles.pressed,
         style,

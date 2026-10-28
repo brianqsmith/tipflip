@@ -57,11 +57,25 @@ export function ThankYouCheck() {
       ]).start();
     }
 
+    // The player is fresh on every visit, so there is nothing to rewind.
+    // If the sound is still loading at the ding moment, play it as soon as
+    // it is ready instead of dropping it.
+    let sub: { remove(): void } | undefined;
     const timer = setTimeout(() => {
-      ding.seekTo(0);
-      ding.play();
+      if (ding.isLoaded) {
+        ding.play();
+        return;
+      }
+      sub = ding.addListener('playbackStatusUpdate', (status) => {
+        if (!status.isLoaded) return;
+        sub?.remove();
+        ding.play();
+      });
     }, DING_AT_MS);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      sub?.remove();
+    };
   }, [reduceMotion, ring, check, text, ding]);
 
   return (

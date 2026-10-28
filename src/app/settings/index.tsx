@@ -1,7 +1,7 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
-import { BackHandler, Platform, ScrollView, StyleSheet, Text } from 'react-native';
+import { BackHandler, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Toggle } from '../../components/settings/controls';
@@ -60,18 +60,29 @@ export default function SettingsHome() {
         </Section>
 
         <Section title="SETTINGS">
-          <ListRow label="Welcome screen" onPress={() => router.push('/settings/welcome')} />
-          <ListRow label="Signature screen" onPress={() => router.push('/settings/signature')} />
-          <ListRow label="'No discount' screen" onPress={() => router.push('/settings/no-discount')} />
-          <ListRow label="Terms page for the server" onPress={() => router.push('/settings/terms')} />
+          <ListRow label="Welcome page" onPress={() => router.push('/settings/welcome')} />
+          <ListRow
+            label="Signature requirement"
+            onPress={() => router.push('/settings/signature')}
+          />
+          <ListRow
+            label='"No discount" option'
+            onPress={() => router.push('/settings/no-discount')}
+          />
+          <ListRow
+            label="Terms page for the waiter"
+            onPress={() => router.push('/settings/terms')}
+          />
           <ListRow
             label="Dark mode"
             right={
-              <Toggle
-                label="Dark mode"
-                value={settings.darkMode}
-                onValueChange={(darkMode) => updateSettings({ darkMode })}
-              />
+              <View style={styles.darkToggle}>
+                <Toggle
+                  label="Dark mode"
+                  value={settings.darkMode}
+                  onValueChange={(darkMode) => updateSettings({ darkMode })}
+                />
+              </View>
             }
             last
           />
@@ -83,12 +94,22 @@ export default function SettingsHome() {
             accessory={<Text style={styles.star}>★</Text>}
             onPress={() => openLink(storeLink)}
           />
-          <ListRow label="About me and the app" onPress={() => router.push('/settings/info/about')} />
-          <ListRow label="Connect with me" onPress={() => router.push('/settings/info/connect')} last />
+          <ListRow
+            label="About me and the app"
+            onPress={() => router.push('/settings/info/about')}
+          />
+          <ListRow
+            label="Connect with me"
+            onPress={() => router.push('/settings/info/connect')}
+            last
+          />
         </Section>
 
         <Section title="SUPPORT">
-          <ListRow label="Privacy guarantee" onPress={() => router.push('/settings/info/privacy')} />
+          <ListRow
+            label="Privacy guarantee"
+            onPress={() => router.push('/settings/info/privacy')}
+          />
           <ListRow label="TipFlip Terms" onPress={() => router.push('/settings/info/terms')} />
           <ListRow label="Help & Feedback" onPress={() => openLink(LINKS.website)} last />
         </Section>
@@ -101,4 +122,6 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   body: { paddingHorizontal: 16, paddingBottom: 40 },
   star: { color: '#F5B700', fontSize: 20 },
+  // Nudged down so the switch sits centered on the "Dark mode" words.
+  darkToggle: { marginTop: 4 },
 });

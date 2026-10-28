@@ -12,7 +12,7 @@ export default function SignatureSettings() {
 
   return (
     <SettingsPage
-      title="Signature screen"
+      title="Signature"
       description="Choose whether to require a signature from the waiter or not. A signature increases the chance of actually getting the discount."
     >
       <ToggleRow

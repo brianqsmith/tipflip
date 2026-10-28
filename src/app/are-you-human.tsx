@@ -66,7 +66,13 @@ export default function AreYouHumanScreen() {
             </Animated.View>
           </View>
 
-          <Button label="I'm not a robot" variant="secondary" looksDisabled={!correct} onPress={notARobot} />
+          {/* Grey until the answer is right, then a solid navy button. */}
+          <Button
+            label="I'm not a robot"
+            variant={correct ? 'accent' : 'secondary'}
+            looksDisabled={!correct}
+            onPress={notARobot}
+          />
           <Button label="Give a discount" onPress={backToWelcome} />
         </ScrollView>
       </KeyboardAvoidingView>

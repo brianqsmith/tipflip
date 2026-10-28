@@ -16,6 +16,8 @@ export type Palette = {
   primary: string;
   onPrimary: string;
   secondary: string;
+  accent: string;
+  onAccent: string;
   onSecondary: string;
   disabled: string;
   onDisabled: string;
@@ -36,6 +38,9 @@ export const palettes: Record<ColorScheme, Palette> = {
     primary: brand.blue,
     onPrimary: brand.white,
     secondary: '#EEF0F4',
+    // Navy: a strong "you can tap this now" color that differs from the blue.
+    accent: brand.navy,
+    onAccent: brand.white,
     onSecondary: '#3F4757',
     disabled: '#F4F5F7',
     onDisabled: '#A7ADB9',
@@ -54,6 +59,8 @@ export const palettes: Record<ColorScheme, Palette> = {
     primary: '#3D76FF',
     onPrimary: brand.white,
     secondary: '#253049',
+    accent: '#5C78E0',
+    onAccent: brand.white,
     onSecondary: '#D9DEEA',
     disabled: '#1B2338',
     onDisabled: '#5D6782',
