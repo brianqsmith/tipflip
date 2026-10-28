@@ -1,4 +1,4 @@
-import { Divider, FieldLabel, TextArea, ToggleRow } from '../../components/settings/controls';
+import { FieldLabel, TextArea, ToggleRow } from '../../components/settings/controls';
 import { SettingsPage } from '../../components/settings/SettingsPage';
 import { Stepper } from '../../components/settings/Stepper';
 import { LIMITS, type Settings } from '../../settings/defaults';
@@ -35,8 +35,6 @@ export default function WelcomeSettings() {
         value={settings.allowCustom}
         onValueChange={(allowCustom) => updateSettings({ allowCustom })}
       />
-
-      <Divider />
 
       <FieldLabel label="Welcome message" description="This text is shown above the discount options." />
       <TextArea

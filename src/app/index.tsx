@@ -33,11 +33,7 @@ export default function WelcomeScreen() {
         footer={
           <Text style={[styles.footer, { color: colors.textMuted }]}>
             *By selecting a discount you agree to the{' '}
-            <Text
-              style={[styles.footerLink, { color: colors.primary }]}
-              onPress={() => router.push('/terms')}
-              accessibilityRole="link"
-            >
+            <Text onPress={() => router.push('/terms')} accessibilityRole="link">
               Terms
             </Text>
           </Text>
@@ -105,5 +101,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 14 },
   lock: { position: 'absolute', right: 16 },
   footer: { fontSize: 13, paddingHorizontal: 12, paddingBottom: 6 },
-  footerLink: { textDecorationLine: 'underline' },
 });
