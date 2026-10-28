@@ -35,6 +35,16 @@
     "scheme": "tipflip",
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1583f4f7-feb7-474c-b751-2cdf52362a04"
+      }
+    },
+    "owner": "brianqsmith",
+    "updates": {
+      "url": "https://u.expo.dev/1583f4f7-feb7-474c-b751-2cdf52362a04"
+    },
+    "runtimeVersion": "exposdk:58.0.0"
   }
 }
