@@ -1,66 +1,100 @@
-import { StyleSheet, Switch, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { Logo } from '../components/Logo';
+import { Button } from '../components/Button';
+import { CustomDiscountSheet } from '../components/CustomDiscountSheet';
+import { DiscountButton } from '../components/DiscountButton';
+import { LockIcon } from '../components/LockIcon';
+import { WaiterScreen } from '../components/WaiterScreen';
+import { useSaveDiscount } from '../hooks/useSaveDiscount';
+import { useSettings } from '../settings/SettingsProvider';
 import { useTheme } from '../theme/ThemeProvider';
 
-// Phase 1 placeholder for the welcome screen. It shows the logo, colors and
-// both themes on a real phone; the discount buttons arrive in phase 2.
 export default function WelcomeScreen() {
-  const { scheme, colors, setDarkMode } = useTheme();
+  const { colors } = useTheme();
+  const { settings } = useSettings();
+  const saveDiscount = useSaveDiscount();
+  const [customOpen, setCustomOpen] = useState(false);
+
+  const choose = (percent: number) => {
+    if (settings.requireSignature) {
+      router.push({ pathname: '/signature', params: { percent: String(percent) } });
+    } else {
+      saveDiscount(percent, null);
+    }
+  };
+
+  const [first, second, third, fourth] = settings.discounts;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
-        <Logo height={36} />
-      </View>
-
-      <View style={styles.body}>
-        <Text style={[styles.title, { color: colors.text }]}>Please select a customer discount</Text>
-        <View style={[styles.sampleButton, { backgroundColor: colors.primary }]}>
-          <Text style={[styles.sampleButtonText, { color: colors.onPrimary }]}>20%</Text>
-        </View>
-        <Text style={[styles.note, { color: colors.textMuted }]}>
-          Discount buttons are coming in the next build.
+    <WaiterScreen
+      footer={
+        <Text style={[styles.footer, { color: colors.textMuted }]}>
+          *By selecting a discount you agree to the{' '}
+          <Text
+            style={[styles.footerLink, { color: colors.primary }]}
+            onPress={() => router.push('/terms')}
+            accessibilityRole="link"
+          >
+            Terms
+          </Text>
         </Text>
+      }
+    >
+      <View style={styles.body}>
+        <Text style={[styles.title, { color: colors.text }]}>{settings.welcomeMessage}</Text>
+
+        <View style={styles.row}>
+          <DiscountButton percent={first} onSelect={() => choose(first)} />
+          <DiscountButton percent={second} onSelect={() => choose(second)} />
+        </View>
+        <View style={styles.row}>
+          <DiscountButton percent={third} onSelect={() => choose(third)} />
+          {settings.allowCustom ? (
+            <DiscountButton percent="custom" onSelect={() => setCustomOpen(true)} />
+          ) : (
+            <DiscountButton percent={fourth} onSelect={() => choose(fourth)} />
+          )}
+        </View>
+
+        {settings.allowNoDiscount ? (
+          <Button
+            label="No discount"
+            variant="secondary"
+            onPress={() => router.push('/are-you-sure')}
+          />
+        ) : (
+          <Button
+            label="No discount"
+            variant="secondary"
+            disabled
+            accessory={
+              <View style={styles.lock}>
+                <LockIcon color={colors.onDisabled} />
+              </View>
+            }
+          />
+        )}
       </View>
 
-      <View style={[styles.previewRow, { borderColor: colors.border, backgroundColor: colors.surface }]}>
-        <Text style={[styles.previewLabel, { color: colors.text }]}>Preview dark mode</Text>
-        <Switch
-          value={scheme === 'dark'}
-          onValueChange={setDarkMode}
-          trackColor={{ true: colors.primary }}
-          thumbColor="#FFFFFF"
-        />
-      </View>
-    </SafeAreaView>
+      <CustomDiscountSheet
+        visible={customOpen}
+        onClose={() => setCustomOpen(false)}
+        onContinue={(percent) => {
+          setCustomOpen(false);
+          choose(percent);
+        }}
+      />
+    </WaiterScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 24 },
-  header: { alignItems: 'center', paddingTop: 12, paddingBottom: 24 },
-  body: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 24 },
-  title: { fontSize: 26, fontWeight: '700', textAlign: 'center' },
-  sampleButton: {
-    width: 150,
-    height: 110,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sampleButtonText: { fontSize: 34, fontWeight: '700' },
-  note: { fontSize: 16, textAlign: 'center' },
-  previewRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 16,
-  },
-  previewLabel: { fontSize: 17, fontWeight: '600' },
+  body: { flex: 1, justifyContent: 'center', gap: 14, paddingBottom: 40 },
+  title: { fontSize: 32, fontWeight: '700', lineHeight: 38, marginBottom: 14, paddingHorizontal: 8 },
+  row: { flexDirection: 'row', gap: 14 },
+  lock: { position: 'absolute', right: 16 },
+  footer: { fontSize: 13, paddingHorizontal: 12, paddingBottom: 6 },
+  footerLink: { textDecorationLine: 'underline' },
 });
