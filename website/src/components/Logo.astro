@@ -1,0 +1,20 @@
+---
+import { BLUE_PATHS, NAVY_PATHS } from './logoPaths';
+
+// The source artwork is 2003 x 998; this viewBox crops to the visible mark.
+const { height = 32, class: className } = Astro.props;
+const width = Math.round((height * 1716) / 527);
+---
+<svg
+  class:list={['logo', className]}
+  width={width}
+  height={height}
+  viewBox="171 240 1716 527"
+  role="img"
+  aria-label="TipFlip"
+>
+  <g transform="translate(0,998) scale(0.1,-0.1)">
+    {NAVY_PATHS.map((d) => <path d={d} class="logo-tip" />)}
+    {BLUE_PATHS.map((d) => <path d={d} class="logo-flip" />)}
+  </g>
+</svg>

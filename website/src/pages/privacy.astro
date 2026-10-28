@@ -1,0 +1,17 @@
+---
+import Info from '../layouts/Info.astro';
+// The same text the app shows, so the two never drift apart.
+import { INFO_PAGES } from '../../../src/content/info';
+---
+<Info
+  page={INFO_PAGES.privacy}
+  title="Privacy Policy | TipFlip"
+  description="TipFlip works entirely on your phone. No account, no internet connection, no tracking, and no personal data collected."
+>
+  <h2>This website</h2>
+  <p>
+    This website does not use cookies, ads or tracking scripts, and it has no sign-up forms. Like any website, the
+    hosting provider may briefly process technical information such as your IP address to deliver pages and protect
+    against abuse.
+  </p>
+</Info>
